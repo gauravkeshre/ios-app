@@ -152,7 +152,7 @@ class SettingsViewController: UITableViewController {
             return
         }
         
-        present(NavigationManager.getSubscriptionViewController(), animated: true, completion: nil)
+//        present(NavigationManager.getSubscriptionViewController(), animated: true, completion: nil)
     }
     
     @IBAction func changePlan(_ sender: Any) {
@@ -244,7 +244,7 @@ class SettingsViewController: UITableViewController {
             }
             
             if !Application.shared.serviceStatus.isActive && !Application.shared.serviceStatus.isLegacyAccount() {
-                present(NavigationManager.getSubscriptionViewController(), animated: true, completion: nil)
+//                present(NavigationManager.getSubscriptionViewController(), animated: true, completion: nil)
                 deselectRow(sender: sender)
                 return false
             }
@@ -274,7 +274,7 @@ class SettingsViewController: UITableViewController {
             return
         }
         
-        present(NavigationManager.getSubscriptionViewController(), animated: true, completion: nil)
+//        present(NavigationManager.getSubscriptionViewController(), animated: true, completion: nil)
     }
     
     @objc fileprivate func serviceAuthorized() {
