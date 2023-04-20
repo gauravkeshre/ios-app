@@ -24,6 +24,7 @@
 import UIKit
 import FloatingPanel
 import NetworkExtension
+import WidgetKit
 
 class MainViewController: UIViewController {
     
@@ -140,6 +141,8 @@ class MainViewController: UIViewController {
         }
         
         Application.shared.connectionManager.statusModificationDate = Date()
+        
+        WidgetCenter.shared.reloadTimelines(ofKind: "IVPNWidget")
     }
     
     @objc func updateGeoLocation() {
@@ -158,6 +161,8 @@ class MainViewController: UIViewController {
                 mainView.ipv4ViewModel = ProofsViewModel(model: model)
                 mainView.infoAlertViewModel.infoAlert = .subscriptionExpiration
                 mainView.updateInfoAlert()
+                model.save()
+                WidgetCenter.shared.reloadTimelines(ofKind: "IVPNWidget")
                 
                 if !model.isIvpnServer {
                     Application.shared.geoLookup = model
