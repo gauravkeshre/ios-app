@@ -464,11 +464,7 @@ extension SettingsViewController {
         
         // Disconnected custom DNS
         if indexPath.section == 3 && indexPath.row == 3 {
-            if #available(iOS 14.0, *) {
-                return UITableView.automaticDimension
-            } else {
-                return 0
-            }
+            return UITableView.automaticDimension
         }
         
         // Kill Switch
