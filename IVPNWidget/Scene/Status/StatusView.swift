@@ -41,7 +41,7 @@ struct StatusView: View {
                 .padding(.bottom, 2)
             switch family {
             case .systemSmall:
-                Text("Your status is")
+                Text(viewModel.statusTitle())
                     .foregroundColor(.secondary)
                     .font(.footnote)
                     .padding(.bottom, -5)
@@ -58,9 +58,10 @@ struct StatusView: View {
             default:
                 HStack {
                     VStack(alignment: .leading) {
-                        Text("Your status is")
+                        Text(viewModel.statusTitle())
                             .foregroundColor(.secondary)
                             .font(.footnote)
+                            .fixedSize(horizontal: false, vertical: true)
                             .padding(.bottom, -5)
                         Text(viewModel.statusText())
                             .font(.system(size: 16, weight: .medium))
