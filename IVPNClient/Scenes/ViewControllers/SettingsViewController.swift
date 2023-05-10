@@ -47,9 +47,9 @@ class SettingsViewController: UITableViewController {
     @IBOutlet weak var askToReconnectSwitch: UISwitch!
     @IBOutlet weak var killSwitchSwitch: UISwitch!
     @IBOutlet weak var selectHostSwitch: UISwitch!
+    @IBOutlet weak var sendLogsLabel: UILabel!
     @IBOutlet weak var preventSameCountryMultiHopSwitch: UISwitch!
     @IBOutlet weak var preventSameISPMultiHopSwitch: UISwitch!
-    @IBOutlet weak var sendLogsLabel: UILabel!
     
     // MARK: - Properties -
     
