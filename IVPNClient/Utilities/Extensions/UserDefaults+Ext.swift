@@ -88,6 +88,7 @@ extension UserDefaults {
         static let killSwitch = "killSwitch"
         static let selectHost = "selectHost"
         static let isLoggedIn = "isLoggedIn"
+        static let antiTrackerDns = "antiTrackerDns"
     }
     
     @objc dynamic var wireguardTunnelProviderError: String {
@@ -143,11 +144,11 @@ extension UserDefaults {
     }
     
     @objc dynamic var antiTrackerDNS: String {
-        return string(forKey: Key.antiTrackerDNS) ?? ""
+        return AntiTrackerDns.load()?.normal ?? ""
     }
     
     @objc dynamic var antiTrackerHardcoreDNS: String {
-        return string(forKey: Key.antiTrackerHardcoreDNS) ?? ""
+        return AntiTrackerDns.load()?.hardcore ?? ""
     }
     
     @objc dynamic var wgKeyTimestamp: Date {
@@ -278,6 +279,7 @@ extension UserDefaults {
         standard.removeObject(forKey: Key.wgMtu)
         standard.removeObject(forKey: Key.preventSameCountryMultiHop)
         standard.removeObject(forKey: Key.preventSameISPMultiHop)
+        standard.removeObject(forKey: Key.antiTrackerDns)
         standard.synchronize()
     }
     
