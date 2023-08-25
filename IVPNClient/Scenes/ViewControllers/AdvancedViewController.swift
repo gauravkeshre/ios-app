@@ -4,7 +4,7 @@
 //  https://github.com/ivpn/ios-app
 //
 //  Created by Juraj Hilje on 2023-08-19.
-//  Copyright (c) 2023 Privatus Limited.
+//  Copyright (c) 2023 IVPN Limited.
 //
 //  This file is part of the IVPN iOS app.
 //
@@ -37,6 +37,13 @@ class AdvancedViewController: UITableViewController {
     // MARK: - @IBActions -
     
     @IBAction func toggleDisableLanAccess(_ sender: UISwitch) {
+        if sender.isOn && Application.shared.settings.connectionProtocol.tunnelType() == .ipsec {
+            showAlert(title: "IKEv2 not supported", message: "Disable LAN traffic is supported only for OpenVPN and WireGuard protocols.") { _ in
+                sender.setOn(false, animated: true)
+            }
+            return
+        }
+        
         UserDefaults.shared.set(sender.isOn, forKey: UserDefaults.Key.disableLanAccess)
         evaluateReconnect(sender: sender as UIView)
     }
