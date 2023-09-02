@@ -198,6 +198,7 @@
 		82A38A1029E2D46000C88372 /* StatusViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A38A0F29E2D46000C88372 /* StatusViewModel.swift */; };
 		82A38A1B29E3201F00C88372 /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A38A1A29E3201F00C88372 /* UserDefaults.swift */; };
 		82A6D74A24A3780B00D6C0E1 /* ConnectToServerPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A6D74924A3780B00D6C0E1 /* ConnectToServerPopupView.swift */; };
+		82A7835F2AA3131E005E2D09 /* SwiftProtobuf in Frameworks */ = {isa = PBXBuildFile; productRef = 82A7835E2AA3131E005E2D09 /* SwiftProtobuf */; };
 		82A7F10523C8661B0015A357 /* ServiceStatusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A7F10423C8661B0015A357 /* ServiceStatusTests.swift */; };
 		82AA8818231E330A00E18ECB /* SessionStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82AA8817231E330A00E18ECB /* SessionStatus.swift */; };
 		82AAF0E92253A4A8005E792F /* StaticWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82AAF0E82253A4A8005E792F /* StaticWebViewController.swift */; };
@@ -832,6 +833,7 @@
 				82EC884729A12D510024CC40 /* SnapKit in Frameworks */,
 				82EC883B29A12C7D0024CC40 /* SwiftyStoreKit in Frameworks */,
 				829F5FC729A13CAE009E1AD3 /* KeychainAccess in Frameworks */,
+				82A7835F2AA3131E005E2D09 /* SwiftProtobuf in Frameworks */,
 				82968A32298A970500077E0A /* TunnelKitOpenVPN in Frameworks */,
 				82EC884429A12D370024CC40 /* FloatingPanel in Frameworks */,
 				82EC883829A12C1F0024CC40 /* Reachability in Frameworks */,
@@ -1813,6 +1815,7 @@
 				82EC884329A12D370024CC40 /* FloatingPanel */,
 				82EC884629A12D510024CC40 /* SnapKit */,
 				829F5FC629A13CAE009E1AD3 /* KeychainAccess */,
+				82A7835E2AA3131E005E2D09 /* SwiftProtobuf */,
 			);
 			productName = IVPNClient;
 			productReference = 9CDDD5AB1D9D2F9F00D39924 /* IVPNClient.app */;
@@ -1935,6 +1938,7 @@
 				82EC884229A12D370024CC40 /* XCRemoteSwiftPackageReference "FloatingPanel" */,
 				82EC884529A12D510024CC40 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				829F5FC529A13CAE009E1AD3 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
+				82A7835D2AA3131E005E2D09 /* XCRemoteSwiftPackageReference "swift-protobuf" */,
 			);
 			productRefGroup = 9CDDD5AC1D9D2F9F00D39924 /* Products */;
 			projectDirPath = "";
@@ -3487,6 +3491,14 @@
 				version = 3.2.0;
 			};
 		};
+		82A7835D2AA3131E005E2D09 /* XCRemoteSwiftPackageReference "swift-protobuf" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-protobuf.git";
+			requirement = {
+				kind = upToNextMinorVersion;
+				minimumVersion = 1.22.0;
+			};
+		};
 		82EC883329A12BD30024CC40 /* XCRemoteSwiftPackageReference "JGProgressHUD" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/JonasGessner/JGProgressHUD";
@@ -3572,6 +3584,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 829F5FC529A13CAE009E1AD3 /* XCRemoteSwiftPackageReference "KeychainAccess" */;
 			productName = KeychainAccess;
+		};
+		82A7835E2AA3131E005E2D09 /* SwiftProtobuf */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 82A7835D2AA3131E005E2D09 /* XCRemoteSwiftPackageReference "swift-protobuf" */;
+			productName = SwiftProtobuf;
 		};
 		82EC883429A12BD30024CC40 /* JGProgressHUD */ = {
 			isa = XCSwiftPackageProductDependency;
