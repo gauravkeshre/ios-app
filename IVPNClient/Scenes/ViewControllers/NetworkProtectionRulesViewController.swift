@@ -26,6 +26,7 @@ import UIKit
 class NetworkProtectionRulesViewController: UITableViewController {
     
     @IBOutlet weak var untrustedConnectSwitch: UISwitch!
+    @IBOutlet weak var untrustedBlockLanSwitch: UISwitch!
     @IBOutlet weak var trustedDisconnectSwitch: UISwitch!
     let defaults = UserDefaults.shared
     
@@ -36,6 +37,26 @@ class NetworkProtectionRulesViewController: UITableViewController {
                 showWireGuardKeysMissingError()
             }
         }
+    }
+    
+    @IBAction func toggleUntrustedBlockLan(_ sender: UISwitch) {
+        if sender.isOn && Application.shared.settings.connectionProtocol.tunnelType() == .ipsec {
+            showAlert(title: "IKEv2 not supported", message: "Block LAN traffic is supported only for OpenVPN and WireGuard protocols.") { _ in
+                sender.setOn(false, animated: true)
+            }
+            return
+        }
+        
+        defaults.set(sender.isOn, forKey: UserDefaults.Key.networkProtectionUntrustedBlockLan)
+        Application.shared.connectionManager.evaluateConnection { [self] error in
+            if error != nil {
+                showWireGuardKeysMissingError()
+            }
+        }
+    }
+    
+    @IBAction func blockLanInfo(_ sender: UIButton) {
+        showAlert(title: "Info", message: "When enabled, it overrides the 'Block LAN traffic' option in Advanced Settings.")
     }
     
     @IBAction func toggleTrustedDisconnect(_ sender: UISwitch) {
@@ -51,6 +72,7 @@ class NetworkProtectionRulesViewController: UITableViewController {
         super.viewDidLoad()
         tableView.backgroundColor = UIColor.init(named: Theme.ivpnBackgroundQuaternary)
         untrustedConnectSwitch.setOn(defaults.networkProtectionUntrustedConnect, animated: false)
+        untrustedBlockLanSwitch.setOn(defaults.networkProtectionUntrustedBlockLan, animated: false)
         trustedDisconnectSwitch.setOn(defaults.networkProtectionTrustedDisconnect, animated: false)
     }
     
