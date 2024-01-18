@@ -188,9 +188,7 @@ extension ControlPanelViewController {
     override func sessionStatusNotFound() {
         guard !UserDefaults.standard.bool(forKey: "-UITests") else { return }
         logOut(deleteSession: false)
-        showErrorAlert(title: "You are logged out", message: "You have been redirected to the login page to re-enter your credentials.") { [self] _ in
-            present(NavigationManager.getLoginViewController(), animated: true)
-        }
+        present(NavigationManager.getLoginViewController(showLogoutAlert: true), animated: true)
     }
     
     override func deleteSessionStart() {
@@ -227,7 +225,7 @@ extension ControlPanelViewController {
         let message = "You've reached the maximum number of connected devices"
         
         // Default
-        guard let error = error, let data = error.data else {
+        guard let error = error, let data = error.data, data.paymentMethod == "prepaid" else {
             showActionSheet(title: message, actions: [
                 "Log out from all devices",
                 "Retry"
@@ -246,9 +244,10 @@ extension ControlPanelViewController {
         }
         
         let service = ServiceType.getType(currentPlan: data.currentPlan)
+        let deviceManagement = data.deviceManagement
         
         // Device Management enabled, Pro plan
-        if data.deviceManagement && service == .pro {
+        if deviceManagement && service == .pro {
             showActionSheet(title: message, actions: [
                 "Log out from all devices",
                 "Visit Device Management",
@@ -270,16 +269,19 @@ extension ControlPanelViewController {
         }
         
         // Device Management disabled, Pro plan
-        if !data.deviceManagement && service == .pro {
+        if !deviceManagement && service == .pro {
             showActionSheet(title: message, actions: [
                 "Log out from all devices",
-                "Enable Device Management"
+                "Enable Device Management",
+                "Retry",
             ], cancelAction: "Cancel login", sourceView: self.controlPanelView.connectSwitch) { [self] index in
                 switch index {
                 case 0:
                     forceNewSession()
                 case 1:
                     openWebPageInBrowser(data.deviceManagementUrl)
+                case 2:
+                    newSession()
                 default:
                     break
                 }
@@ -289,7 +291,7 @@ extension ControlPanelViewController {
         }
         
         // Device Management enabled, Standard plan
-        if data.deviceManagement && service == .standard {
+        if deviceManagement && service == .standard {
             showActionSheet(title: message, actions: [
                 "Log out from all devices",
                 "Visit Device Management",
@@ -314,10 +316,11 @@ extension ControlPanelViewController {
         }
         
         // Device Management disabled, Standard plan
-        if !data.deviceManagement && service == .standard {
+        if !deviceManagement && service == .standard {
             showActionSheet(title: message, actions: [
                 "Log out from all devices",
                 "Enable Device Management",
+                "Retry",
                 "Upgrade for 7 devices"
             ], cancelAction: "Cancel login", sourceView: self.controlPanelView.connectSwitch) { [self] index in
                 switch index {
@@ -326,6 +329,8 @@ extension ControlPanelViewController {
                 case 1:
                     openWebPageInBrowser(data.deviceManagementUrl)
                 case 2:
+                    newSession()
+                case 3:
                     openWebPageInBrowser(data.upgradeToUrl)
                 default:
                     break

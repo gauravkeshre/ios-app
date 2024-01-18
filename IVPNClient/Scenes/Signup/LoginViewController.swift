@@ -43,6 +43,8 @@ class LoginViewController: UIViewController {
     
     // MARK: - Properties -
     
+    var showLogoutAlert: Bool = false
+    
     private lazy var sessionManager: SessionManager = {
         let sessionManager = SessionManager()
         sessionManager.delegate = self
@@ -134,6 +136,13 @@ class LoginViewController: UIViewController {
         // iOS 13 UIKit bug: https://forums.developer.apple.com/thread/121861
         // Remove when fixed in future releases
         navigationController?.navigationBar.setNeedsLayout()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if showLogoutAlert {
+            showErrorAlert(title: "You are logged out", message: "You have been redirected to the login page to re-enter your credentials.")
+        }
     }
     
     // MARK: - Observers -
@@ -374,7 +383,7 @@ extension LoginViewController {
         let message = "You've reached the maximum number of connected devices"
         
         // Default
-        guard let error = error, let data = error.data else {
+        guard let error = error, let data = error.data, data.paymentMethod == "prepaid" else {
             showActionSheet(title: message, actions: [
                 "Log out from all devices",
                 "Retry"
@@ -393,9 +402,10 @@ extension LoginViewController {
         }
         
         let service = ServiceType.getType(currentPlan: data.currentPlan)
+        let deviceManagement = data.deviceManagement
         
         // Device Management enabled, Pro plan
-        if data.deviceManagement && service == .pro {
+        if deviceManagement && service == .pro {
             showActionSheet(title: message, actions: [
                 "Log out from all devices",
                 "Visit Device Management",
@@ -417,16 +427,19 @@ extension LoginViewController {
         }
         
         // Device Management disabled, Pro plan
-        if !data.deviceManagement && service == .pro {
+        if !deviceManagement && service == .pro {
             showActionSheet(title: message, actions: [
                 "Log out from all devices",
-                "Enable Device Management"
+                "Enable Device Management",
+                "Retry",
             ], cancelAction: "Cancel login", sourceView: self.userName) { [self] index in
                 switch index {
                 case 0:
                     forceNewSession()
                 case 1:
                     openWebPageInBrowser(data.deviceManagementUrl)
+                case 2:
+                    newSession()
                 default:
                     break
                 }
@@ -436,7 +449,7 @@ extension LoginViewController {
         }
         
         // Device Management enabled, Standard plan
-        if data.deviceManagement && service == .standard {
+        if deviceManagement && service == .standard {
             showActionSheet(title: message, actions: [
                 "Log out from all devices",
                 "Visit Device Management",
@@ -461,10 +474,11 @@ extension LoginViewController {
         }
         
         // Device Management disabled, Standard plan
-        if !data.deviceManagement && service == .standard {
+        if !deviceManagement && service == .standard {
             showActionSheet(title: message, actions: [
                 "Log out from all devices",
                 "Enable Device Management",
+                "Retry",
                 "Upgrade for 7 devices"
             ], cancelAction: "Cancel login", sourceView: self.userName) { [self] index in
                 switch index {
@@ -473,6 +487,8 @@ extension LoginViewController {
                 case 1:
                     openWebPageInBrowser(data.deviceManagementUrl)
                 case 2:
+                    newSession()
+                case 3:
                     openWebPageInBrowser(data.upgradeToUrl)
                 default:
                     break
