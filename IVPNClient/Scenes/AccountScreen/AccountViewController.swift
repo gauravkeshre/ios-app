@@ -90,12 +90,14 @@ class AccountViewController: UITableViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         accountView.initQRCode(viewModel: viewModel)
+        sessionManager.getSessionStatus()
     }
     
     // MARK: - Observers -
     
     func addObservers() {
         NotificationCenter.default.addObserver(self, selector: #selector(subscriptionActivated), name: Notification.Name.SubscriptionActivated, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(subscriptionActivated), name: Notification.Name.ServiceAuthorized, object: nil)
     }
     
     // MARK: - Private methods -
@@ -192,6 +194,15 @@ extension AccountViewController {
         showAlert(title: "Session removed from IVPN server", message: "You are successfully logged out") { _ in
             self.navigationController?.dismiss(animated: true)
         }
+    }
+    
+    override func sessionStatusSuccess() {
+        subscriptionActivated()
+    }
+    
+    override func sessionStatusNotFound() {
+        logOut(deleteSession: false)
+        present(NavigationManager.getLoginViewController(showLogoutAlert: true), animated: true)
     }
     
 }
